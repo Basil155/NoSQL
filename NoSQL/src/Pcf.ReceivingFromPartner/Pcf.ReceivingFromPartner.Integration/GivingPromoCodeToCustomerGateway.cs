@@ -29,7 +29,7 @@ namespace Pcf.ReceivingFromPartner.Integration
                 PartnerManagerId = promoCode.PartnerManagerId
             };
             
-            var response = await _httpClient.PostAsJsonAsync("api/v1/promocodes", dto);
+            var response = await _httpClient.PostAsJsonAsync("api/v1/Promocodes", dto);
 
             response.EnsureSuccessStatusCode();
         }

@@ -1,0 +1,18 @@
+{
+  "profiles": {
+    "Docker Compose": {
+      "commandName": "DockerCompose",
+      "commandVersion": "1.0",
+      "serviceActions": {
+        "promocode-factory-administration-db": "StartWithoutDebugging",
+        "promocode-factory-administration-api": "StartWithoutDebugging",
+        "pcf-dictionary-db": "StartWithoutDebugging",
+        "pcf-dictionary-api": "StartWithoutDebugging",
+        "promocode-factory-giving-to-customer-api": "StartWithoutDebugging",
+        "promocode-factory-giving-to-customer-db": "StartWithoutDebugging",
+        "promocode-factory-receiving-from-partner-api": "StartWithoutDebugging",
+        "promocode-factory-receiving-from-partner-db": "StartWithoutDebugging"
+      }
+    }
+  }
+}

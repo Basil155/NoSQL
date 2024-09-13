@@ -20,22 +20,24 @@ using Microsoft.AspNetCore.Mvc;
         : ControllerBase
     {
         private readonly IRepository<Partner> _partnersRepository;
-        private readonly IRepository<Preference> _preferencesRepository;
+        //private readonly IRepository<Preference> _preferencesRepository;
         private readonly INotificationGateway _notificationGateway;
         private readonly IGivingPromoCodeToCustomerGateway _givingPromoCodeToCustomerGateway;
         private readonly IAdministrationGateway _administrationGateway;
+        private readonly IDictionaryGateway<Preference> _preferencesGateway;
 
-        public PartnersController(IRepository<Partner> partnersRepository,
-            IRepository<Preference> preferencesRepository, 
+        public PartnersController(IRepository<Partner> partnersRepository, 
             INotificationGateway notificationGateway,
             IGivingPromoCodeToCustomerGateway givingPromoCodeToCustomerGateway,
-            IAdministrationGateway administrationGateway)
+            IAdministrationGateway administrationGateway,
+            IDictionaryGateway<Preference> preferencesGateway)
         {
             _partnersRepository = partnersRepository;
-            _preferencesRepository = preferencesRepository;
+            //_preferencesRepository = preferencesRepository;
             _notificationGateway = notificationGateway;
             _givingPromoCodeToCustomerGateway = givingPromoCodeToCustomerGateway;
             _administrationGateway = administrationGateway;
+            _preferencesGateway = preferencesGateway;
         }
 
         /// <summary>
@@ -264,10 +266,12 @@ using Microsoft.AspNetCore.Mvc;
 
             if (promoCode == null)
             {
-                return NotFound("Партнер не найден");
+                return NotFound("Промокод не найден");
             }
+
+            var preference = await _preferencesGateway.GetByIdAsync(promoCode.PreferenceId);
             
-            var response =  new PromoCodeShortResponse()
+            var response =  new PromoCodeResponse()
                 {
                     Id = promoCode.Id,
                     Code = promoCode.Code,
@@ -275,7 +279,9 @@ using Microsoft.AspNetCore.Mvc;
                     EndDate = promoCode.EndDate.ToString("yyyy-MM-dd"),
                     PartnerName = promoCode.Partner.Name,
                     PartnerId = promoCode.PartnerId,
-                    ServiceInfo = promoCode.ServiceInfo
+                    ServiceInfo = promoCode.ServiceInfo,
+                    PreferenceId = promoCode.PreferenceId,
+                    PreferenceName = preference.Name
                 };
 
             return Ok(response);
@@ -317,7 +323,8 @@ using Microsoft.AspNetCore.Mvc;
             }
 
             //Получаем предпочтение по имени
-            var preference = await _preferencesRepository.GetByIdAsync(request.PreferenceId);
+            //var preference = await _preferencesRepository.GetByIdAsync(request.PreferenceId);
+            var preference = await _preferencesGateway.GetByIdAsync(request.PreferenceId);
 
             if (preference == null)
             {

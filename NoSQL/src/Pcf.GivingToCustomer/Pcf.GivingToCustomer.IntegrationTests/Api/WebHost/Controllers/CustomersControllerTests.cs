@@ -94,19 +94,21 @@ namespace Pcf.GivingToCustomer.IntegrationTests.Api.WebHost.Controllers
                 Email = "ivan_sergeev@mail.ru",
                 FirstName = "Иван",
                 LastName = "Петров",
-                Preferences = new List<PreferenceResponse>()
-                {
+                Preferences =
+                [
+                    new PreferenceResponse()
+                    {
+                        Id = Guid.Parse("76324c47-68d2-472d-abb8-33cfa8cc0c84"),
+                        Name = "Дети",
+                    },
+
                     new PreferenceResponse()
                     {
                         Id = Guid.Parse("ef7f299f-92d7-459f-896e-078ed53ef99c"),
                         Name = "Театр",
-                    },
-                    new PreferenceResponse()
-                    {
-                        Id = Guid.Parse("76324c47-68d2-472d-abb8-33cfa8cc0c84"),
-                        Name = "Дети",                    
                     }
-                }
+                ],
+                PromoCodes = []
             };
 
             //Act

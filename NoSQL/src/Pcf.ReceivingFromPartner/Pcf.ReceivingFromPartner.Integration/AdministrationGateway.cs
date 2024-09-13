@@ -18,7 +18,7 @@ namespace Pcf.ReceivingFromPartner.Integration
         
         public async Task NotifyAdminAboutPartnerManagerPromoCode(Guid partnerManagerId)
         {
-            var response = await _httpClient.PostAsync($"api/v1/employees/{partnerManagerId}/appliedPromocodes", 
+            var response = await _httpClient.PostAsync($"api/v1/Employees/{partnerManagerId}/appliedPromocodes", 
                 new StringContent(string.Empty));
 
             response.EnsureSuccessStatusCode();

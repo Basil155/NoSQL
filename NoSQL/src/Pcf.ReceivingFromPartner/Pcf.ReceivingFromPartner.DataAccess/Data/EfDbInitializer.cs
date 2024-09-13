@@ -15,8 +15,8 @@
             _dataContext.Database.EnsureDeleted();
             _dataContext.Database.EnsureCreated();
 
-            _dataContext.AddRange(FakeDataFactory.Preferences);
-            _dataContext.SaveChanges();
+            //_dataContext.AddRange(FakeDataFactory.Preferences);
+            //_dataContext.SaveChanges();
             
             _dataContext.AddRange(FakeDataFactory.Partners);
             _dataContext.SaveChanges();

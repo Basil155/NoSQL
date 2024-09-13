@@ -4,6 +4,7 @@ namespace Pcf.GivingToCustomer.Core.Domain
 {
     public class PromoCodeCustomer : BaseEntity
     {
+        public Guid Id { get; set; }
         public Guid PromoCodeId { get; set; }
         public virtual PromoCode PromoCode { get; set; }
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Pcf.GivingToCustomer.Core.Abstractions.Gateways;
 using Pcf.GivingToCustomer.Core.Abstractions.Repositories;
 using Pcf.GivingToCustomer.Core.Domain;
 using Pcf.GivingToCustomer.WebHost.Mappers;
@@ -19,15 +20,18 @@ namespace Pcf.GivingToCustomer.WebHost.Controllers
         : ControllerBase
     {
         private readonly IRepository<PromoCode> _promoCodesRepository;
-        private readonly IRepository<Preference> _preferencesRepository;
+        //private readonly IRepository<Preference> _preferencesRepository;
         private readonly IRepository<Customer> _customersRepository;
+        private readonly IDictionaryGateway<Preference> _preferencesGateway;
 
         public PromocodesController(IRepository<PromoCode> promoCodesRepository, 
-            IRepository<Preference> preferencesRepository, IRepository<Customer> customersRepository)
+            IRepository<Customer> customersRepository,
+            IDictionaryGateway<Preference> preferencesGateway)
         {
             _promoCodesRepository = promoCodesRepository;
-            _preferencesRepository = preferencesRepository;
+            //_preferencesRepository = preferencesRepository;
             _customersRepository = customersRepository;
+            _preferencesGateway = preferencesGateway;
         }
         
         /// <summary>
@@ -60,7 +64,8 @@ namespace Pcf.GivingToCustomer.WebHost.Controllers
         public async Task<IActionResult> GivePromoCodesToCustomersWithPreferenceAsync(GivePromoCodeRequest request)
         {
             //Получаем предпочтение по имени
-            var preference = await _preferencesRepository.GetByIdAsync(request.PreferenceId);
+            //var preference = await _preferencesRepository.GetByIdAsync(request.PreferenceId);
+            var preference = await _preferencesGateway.GetByIdAsync(request.PreferenceId);
 
             if (preference == null)
             {
@@ -70,7 +75,7 @@ namespace Pcf.GivingToCustomer.WebHost.Controllers
             //  Получаем клиентов с этим предпочтением:
             var customers = await _customersRepository
                 .GetWhere(d => d.Preferences.Any(x =>
-                    x.Preference.Id == preference.Id));
+                    x.PreferenceId == request.PreferenceId));
 
             PromoCode promoCode = PromoCodeMapper.MapFromModel(request, preference, customers);
 

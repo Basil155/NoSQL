@@ -1,0 +1,102 @@
+services:
+  #Administration Db
+  promocode-factory-administration-db:
+    image: "postgres:alpine"
+    container_name: 'promocode-factory-administration-db'
+    restart: always 
+    ports:
+      - 5433:5432
+    environment: 
+      - POSTGRES_PASSWORD=docker
+  #Administration Api
+  promocode-factory-administration-api:
+    image: ${DOCKER_REGISTRY-}pcfadministrationwebhost
+    build:
+      context: .
+      dockerfile: Pcf.Administration/Pcf.Administration.WebHost/Dockerfile
+    container_name: 'promocode-factory-administration-api'
+    restart: always
+    ports:
+      - "8091:8080"
+    environment:
+      - "ConnectionStrings:PromocodeFactoryAdministrationDb=Host=promocode-factory-administration-db;Database=promocode_factory_administration_db;Username=postgres;Password=docker"
+    depends_on: 
+      - promocode-factory-administration-db
+
+  #ReceivingFromPartner Db
+  promocode-factory-receiving-from-partner-db:
+    image: "postgres:alpine"
+    container_name: 'promocode-factory-receiving-from-partner-db'
+    restart: always 
+    ports:
+      - 5434:5432
+    environment: 
+      - POSTGRES_PASSWORD=docker
+  #ReceivingFromPartner Api
+  promocode-factory-receiving-from-partner-api:
+    image: ${DOCKER_REGISTRY-}pcfreceivingfrompartnerwebhost
+    build:
+      context: .
+      dockerfile: Pcf.ReceivingFromPartner/Pcf.ReceivingFromPartner.WebHost/Dockerfile
+    container_name: 'promocode-factory-receiving-from-partner-api'
+    restart: always
+    ports:
+      - "8092:8080"
+    environment:
+      - "ConnectionStrings:PromocodeFactoryReceivingFromPartnerDb=Host=promocode-factory-receiving-from-partner-db;Database=promocode_factory_receiving_from_partner_db;Username=postgres;Password=docker"
+      - "IntegrationSettings:GivingToCustomerApiUrl=http://promocode-factory-giving-to-customer-api:8080"    
+      - "IntegrationSettings:AdministrationApiUrl=http://promocode-factory-administration-api:8080"
+      - "IntegrationSettings:DictionaryApiUrl=http://pcf-dictionary-api:8080"       
+    depends_on: 
+      - promocode-factory-receiving-from-partner-db
+      - pcf-dictionary-api
+  
+  #GivingToCustomer Db
+  promocode-factory-giving-to-customer-db:
+    image: "postgres:alpine"
+    container_name: 'promocode-factory-giving-to-customer-db'
+    restart: always 
+    ports:
+      - 5435:5432
+    environment: 
+      - POSTGRES_PASSWORD=docker
+  #GivingToCustomer Api
+  promocode-factory-giving-to-customer-api:
+    image: ${DOCKER_REGISTRY-}pcfgivingtocustomerwebhost
+    build:
+      context: .
+      dockerfile: Pcf.GivingToCustomer/Pcf.GivingToCustomer.WebHost/Dockerfile
+    container_name: 'promocode-factory-giving-to-customer-api'
+    restart: always
+    ports:
+      - "8093:8080"
+    environment:
+      - "ConnectionStrings:PromocodeFactoryGivingToCustomerDb=Host=promocode-factory-giving-to-customer-db;Database=promocode_factory_giving_to_customer_db;Username=postgres;Password=docker"          
+      - "IntegrationSettings:DictionaryApiUrl=http://pcf-dictionary-api:8080"
+    depends_on: 
+      - promocode-factory-giving-to-customer-db
+      - pcf-dictionary-api
+
+  #Dictionary Redis
+  pcf-dictionary-db:
+    image: redis/redis-stack:latest
+    container_name: 'pcf-dictionary-db'
+    ports:
+      - "6379:6379"
+      - "8001:8001"
+    # volumes:
+    #   - ./redisdata:/data  
+  #Dictionary Api
+  pcf-dictionary-api:
+    image: ${DOCKER_REGISTRY-}pcfdictionarywebhost
+    build:
+      context: .
+      dockerfile: Pcf.Dictionary/Pcf.Dictionary.WebHost/Dockerfile
+    container_name: 'pcf-dictionary-api'
+    restart: always
+    ports:
+      - "8094:8080"
+    environment:
+      - "ConnectionStrings:PromocodeFactoryDictionaryDb=redis://pcf-dictionary-db:6379"          
+    depends_on: 
+      - pcf-dictionary-db

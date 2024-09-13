@@ -4,6 +4,7 @@ namespace Pcf.GivingToCustomer.Core.Domain
 {
     public class CustomerPreference
     {
+        public Guid Id { get; set; }
         public Guid CustomerId { get; set; }
         public virtual Customer Customer { get; set; }
 

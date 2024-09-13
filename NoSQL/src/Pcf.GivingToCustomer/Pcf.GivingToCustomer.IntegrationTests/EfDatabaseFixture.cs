@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net.Http;
 using Pcf.GivingToCustomer.IntegrationTests.Data;
 
 namespace Pcf.GivingToCustomer.IntegrationTests
@@ -13,6 +14,9 @@ namespace Pcf.GivingToCustomer.IntegrationTests
 
             _efTestDbInitializer= new EfTestDbInitializer(DbContext);
             _efTestDbInitializer.InitializeDb();
+
+            HttpClient = new HttpClient();
+            HttpClient.BaseAddress = new Uri("http://localhost:8094/");
         }
 
         public void Dispose()
@@ -21,5 +25,7 @@ namespace Pcf.GivingToCustomer.IntegrationTests
         }
 
         public TestDataContext DbContext { get; private set; }
+
+        public HttpClient HttpClient { get; private set; }
     }
 }

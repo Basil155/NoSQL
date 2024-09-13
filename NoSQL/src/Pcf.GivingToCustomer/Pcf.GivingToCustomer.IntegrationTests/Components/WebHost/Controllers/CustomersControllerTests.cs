@@ -5,6 +5,7 @@ using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Pcf.GivingToCustomer.Core.Domain;
 using Pcf.GivingToCustomer.DataAccess.Repositories;
+using Pcf.GivingToCustomer.Integration;
 using Pcf.GivingToCustomer.WebHost.Controllers;
 using Pcf.GivingToCustomer.WebHost.Models;
 using Xunit;
@@ -16,16 +17,16 @@ namespace Pcf.GivingToCustomer.IntegrationTests.Components.WebHost.Controllers
     {
         private readonly CustomersController _customersController;
         private readonly EfRepository<Customer> _customerRepository;
-        private readonly EfRepository<Preference> _preferenceRepository;
+        private readonly DictionaryGateway<Preference> _preferenceGateway;
         
         public CustomersControllerTests(EfDatabaseFixture efDatabaseFixture)
         {
             _customerRepository = new EfRepository<Customer>(efDatabaseFixture.DbContext);
-            _preferenceRepository = new EfRepository<Preference>(efDatabaseFixture.DbContext);
+            _preferenceGateway = new DictionaryGateway<Preference>(efDatabaseFixture.HttpClient);
             
             _customersController = new CustomersController(
                 _customerRepository, 
-                _preferenceRepository);
+                _preferenceGateway);
         }
         
         [Fact]

@@ -18,8 +18,8 @@ namespace Pcf.ReceivingFromPartner.WebHost.Mappers
             promocode.Code = request.PromoCode;
             promocode.ServiceInfo = request.ServiceInfo;
            
-            promocode.BeginDate = DateTime.Now;
-            promocode.EndDate = DateTime.Now.AddDays(30);
+            promocode.BeginDate = DateTime.UtcNow;
+            promocode.EndDate = DateTime.UtcNow.AddDays(30);
 
             promocode.Preference = preference;
             promocode.PreferenceId = preference.Id;

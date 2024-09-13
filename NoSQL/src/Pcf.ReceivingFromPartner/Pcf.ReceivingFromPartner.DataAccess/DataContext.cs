@@ -22,7 +22,8 @@ namespace Pcf.ReceivingFromPartner.DataAccess
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-
+            modelBuilder.Entity<PromoCode>()
+                .Ignore(e => e.Preference);
         }
     }
 }

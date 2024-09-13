@@ -6,6 +6,7 @@ namespace Pcf.ReceivingFromPartner.DataAccess.Data
 {
     public static class FakeDataFactory
     {
+/*
         public static List<Preference> Preferences => new List<Preference>()
         {
             new Preference()
@@ -22,9 +23,14 @@ namespace Pcf.ReceivingFromPartner.DataAccess.Data
             {
                 Id = Guid.Parse("76324c47-68d2-472d-abb8-33cfa8cc0c84"),
                 Name = "Дети",
+            },
+            new Preference()
+            {
+                Id = Guid.Parse("c33f832a-eeec-4890-87c0-c826710ec393"),
+                Name = "Ghtathtywbz",
             }
         };
-        
+  */      
         public static List<Partner> Partners => new List<Partner>()
         {
             new Partner()

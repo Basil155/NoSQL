@@ -28,7 +28,7 @@ namespace Pcf.GivingToCustomer.WebHost.Models
             Preferences = customer.Preferences.Select(x => new PreferenceResponse()
             {
                 Id = x.PreferenceId,
-                Name = x.Preference.Name
+                Name = x.Preference?.Name
             }).ToList();
             PromoCodes = customer.PromoCodes.Select(x => new PromoCodeShortResponse()
                 {
